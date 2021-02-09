@@ -1,9 +1,11 @@
 package fr.polytech.TPRest.Servlet;
 
 
+import fr.polytech.TPRest.Servlet.DBManager.PokemonManager;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import javax.persistence.GeneratedValue;
 import javax.servlet.http.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -13,94 +15,70 @@ import javax.ws.rs.core.Response;
 
 @Path("/hello")
 public class HelloServlet extends HttpServlet {
+    private PokemonManager pm;
 
-    @GET
-    @Path("sayHello")
-    public String sayHello() {
-        return "hello";
+    //Partie Pokemon avec BBD et Hibernate
+
+    public HelloServlet() {
+        this.pm = new PokemonManager();
     }
 
+    //Méthode POST qui permet de créer un pokemon
     @POST
-    @Path("post")
+    @Path("/pokemon")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addPerson(Person person) {
-        return Response.ok().entity(person).cookie(new NewCookie("person", person.toString())).build();
+    public Pokemon createPokemon(Pokemon pokemon)
+    {
+        PokemonManager pm = new PokemonManager();
+        return pm.create(pokemon);
     }
 
+    //Méthode GET qui permet de récupérer les pokemon
     @GET
-    @Path("get")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/pokemon")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPerson() {
-        Person perso1 = new Person("Florian","Bonhomme");
-        return Response.ok().entity(perso1).build();
+    public List<Pokemon> getPokemon(){
+        return this.pm.getAll();
     }
 
-    @PUT // modifie une donnée dans la bdd
-    @Path("put")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response putPerson(Person person) {
-        return Response.ok().entity(person).cookie(new NewCookie("person", person.toString())).build();
-    }
-
-    @DELETE // supprime une donnée dans la bdd
-    @Path("delete")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deletePerson(Person person) {
-        return Response.ok().entity(person).cookie(new NewCookie("person", person.toString())).build();
-    }
-
-    //POKEMON
-
-    //List<Pokemon> pokemons = Arrays.asList(new Pokemon(1,"Pikachu", 25), new Pokemon(2,"Magicarpe", 19));
-
-    private static List<Pokemon> pokemons;
-    static {
-        pokemons = new ArrayList<>();
-        pokemons.add(new Pokemon(1,"Pikachu", 25));
-        pokemons.add(new Pokemon(2,"Magicarpe", 19));
-    }
-
-    @POST
-    @Path("pokemon")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addPokemon(Pokemon pokemon) {
-        pokemons.add(pokemon);
-        return Response.ok().entity(pokemon).build();
-    }
-
+    //Méthode GET qui permet de récupérer un pokemon à partir de son ID
     @GET
-    @Path("pokemon")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/pokemon/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPokemon() {
-        return Response.ok().entity(pokemons).build();
+    public Pokemon getPokemonById(@PathParam("id") int id)
+    {
+        PokemonManager pm = new PokemonManager();
+        return pm.getById(id);
     }
 
-/*
+    //Méthode PUT qui permet la modification d'un pokemon dans la BDD
     @PUT
-    @Path("pokemon")
+    @Path("/pokemon")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response putPokemon(Pokemon pokemon) {
-        return Response.ok().entity(pokemons).build();
+    public Pokemon updatePokemon(Pokemon pokemon){
+        PokemonManager pm = new PokemonManager();
+        return pm.update(pokemon);
     }
- */
 
-    /*
+    //Méthode qui permet la suppresion d'un pokemon dans la BDD
     @DELETE
-    @Path("pokemon")
+    @Path("/pokemon")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deletePokemon(Pokemon pokemon)
+    {
+        PokemonManager pm = new PokemonManager();
+        return pm.delete(pokemon);
+    }
+
+    @POST
+    @Path("/attaque/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deletePokemon(Pokemon pokemon2) {
-        for (pokemon:pokemons) {
-
-        }
+    public Pokemon createAttaque(Attaque attaque,@PathParam("id") int id)
+    {
+        PokemonManager pm = new PokemonManager();
+        return pm.addAttaque(attaque,id);
     }
-     */
-
 }
