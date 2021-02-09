@@ -17,5 +17,8 @@
         <property name="hibernate.c3p0.idle_test_period">3000</property>
 
         <mapping class="fr.polytech.TPRest.Servlet.Pokemon"/>
+        <mapping class="fr.polytech.TPRest.Servlet.Type"/>
+        <mapping class="fr.polytech.TPRest.Servlet.Dresseur"/>
+        <mapping class="fr.polytech.TPRest.Servlet.Attaque"/>
     </session-factory>
 </hibernate-configuration>
