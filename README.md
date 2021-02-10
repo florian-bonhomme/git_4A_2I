@@ -1,9 +1,10 @@
 # Systèmes Distribués
 ## Projet à rendre
 
-Le projet à rendre est disponible. Il s'agit du dossier TPRest_
+Le projet à rendre est disponible. 
 
 Le projet est disponible via le dossier TPRest_.
+La BDD est disponible il s'agit de pokemon.sql
 
 Dans le projet nous avons donc déclaré plusieurs classes :
 * Pokemon
